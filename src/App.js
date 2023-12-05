@@ -1,7 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
-import questions from './questions/random.json';
-import topics from './questions/topics.json';
-import { getTheme } from './themes';
+import { useCallback, useEffect, useState } from "react";
+import questions from "./questions/random.json";
+import topics from "./questions/topics.json";
+import unpopular from "./questions/unpopular.json";
+import { getTheme } from "./themes";
+import { ThemeSelector } from "./components/ThemeSelector";
+import { GameIntro } from "./components/GameIntro";
+import { Controls } from "./components/Controls";
+import cursed_cat from "./images/cursed_cat.jpg";
+import cat_keyboard from "./images/cat_keyboard.gif";
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -10,15 +16,28 @@ function getRandomInt(min, max) {
 }
 
 function App() {
-  const [theme, setTheme] = useState(getTheme('red'));
+  const [theme, setTheme] = useState(getTheme("emerald"));
   const [gameTexts, setGameTexts] = useState([]);
   const [askedQuestions, setAskedQuestions] = useState([]);
+  const [cat, setCat] = useState(cursed_cat);
   const urlParams = new URLSearchParams(window.location.search);
-  const name = urlParams.get('name');
-  const game = urlParams.get('game');
+  const name = urlParams.get("name");
+  const game = urlParams.get("game");
 
   useEffect(() => {
-    const texts = game === 'underrated' ? topics : questions;
+    let texts = null;
+    switch (game) {
+      case "underrated":
+        texts = topics;
+        break;
+      case "unpopular":
+        texts = unpopular;
+        break;
+      default:
+        texts = questions;
+        break;
+    }
+
     setGameTexts(texts);
     setAskedQuestions([...askedQuestions, getRandomInt(0, texts.length)]);
   }, []);
@@ -27,7 +46,10 @@ function App() {
     let nextQuestion = getRandomInt(0, gameTexts.length);
     do {
       nextQuestion = getRandomInt(0, gameTexts.length);
-    } while (askedQuestions.indexOf(nextQuestion) > -1 || askedQuestions.length === gameTexts.length);
+    } while (
+      askedQuestions.indexOf(nextQuestion) > -1 ||
+      askedQuestions.length === gameTexts.length
+    );
 
     setAskedQuestions([...askedQuestions, nextQuestion]);
   }, [askedQuestions]);
@@ -35,42 +57,44 @@ function App() {
   return (
     <div className={`${theme.bodyBackgroundColor} flex flex-col h-screen`}>
       <div className={`${theme.headerBackgroundColor} px-2 py-5 text-center`}>
-        <span className={`${theme.textColor} text-3xl`}>Talking and gaming <small>(not PC gaming though :&lt;)</small> with... <i className='text-4xl'>{name}</i></span>
+        <span className={`${theme.textColor} text-3xl`}>
+          Talking and chill with... <i className="text-4xl">{name ?? "Me"}</i>
+        </span>
       </div>
-      <div className='flex flex-col grow'>
-        <p className='font-serif text-4xl italic px-46 pt-60 pb-16 text-center'>
+      <div className="flex flex-col grow pt-52">
+        <GameIntro game={game} />
+        <p className="font-serif text-4xl italic px-46 pt-6 pb-16 text-center">
           {gameTexts[askedQuestions[askedQuestions.length - 1]]}
         </p>
-        <button onClick={onNextClick}
-          disabled={askedQuestions.length === gameTexts.length}
-          className={`${theme.buttonBackgroundColor} ${theme.buttonTextColor} disabled:opacity-25 font-bold w-max p-6 self-center rounded-md shadow-lg shadow-current hover:shadow-indigo-500/40`}>
-          {askedQuestions.length === gameTexts.length ? "There's no more texts ;<" : game === 'underrated' ? 'Give me next topic!' : 'Give me next question!'}
-        </button>
-        <div className='grow w-1 h-full'></div>
-        <div className='inline-flex justify-end pr-16 pb-16'>
-          <select onChange={(e) => setTheme(getTheme((e.target.value || '').toLowerCase()))}>
-            <option value="gray">Gray theme</option>
-            <option value="Zinc">Zinc theme</option>
-            <option value="Neutral">Neutral theme</option>
-            <option value="Stone">Stone theme</option>
-            <option value="Orange">Orange theme</option>
-            <option value="Yellow">Yellow theme</option>
-            <option value="Lime">Lime theme</option>
-            <option value="Green">Green theme</option>
-            <option value="Emerald">Emerald theme</option>
-            <option value="Teal">Teal theme</option>
-            <option value="Cyan">Cyan theme</option>
-            <option value="Sky">Sky theme</option>
-            <option value="Blue">Blue theme</option>
-            <option value="Indigo">Indigo theme</option>
-            <option value="Violet">Violet theme</option>
-            <option value="Purple">Purple theme</option>
-            <option value="Fuchsia">Fuchsia theme</option>
-            <option value="Pink">Pink theme</option>
-            <option value="Rose">Rose theme</option>
-          </select>
+
+        <Controls
+          game={game}
+          finished={askedQuestions.length === gameTexts.length}
+          onNextClick={onNextClick}
+          theme={theme}
+        />
+
+        <div className="grow w-1 h-full"></div>
+        <div className="inline-flex justify-end pr-16 pb-16">
+          <ThemeSelector
+            value={theme.themeName}
+            onChange={(theme) => setTheme(getTheme(theme))}
+          />
         </div>
       </div>
+      <img
+        src={cat}
+        onMouseEnter={() => setCat(cat_keyboard)}
+        onMouseLeave={() => setCat(cursed_cat)}
+        alt="Cursed Cat"
+        style={{
+          position: "absolute",
+          bottom: "5px",
+          left: "5px",
+          width: "auto",
+          height: "100px",
+        }}
+      />
     </div>
   );
 }

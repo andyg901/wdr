@@ -4,6 +4,7 @@ export const getTheme = (color = 'red') => {
         bodyBackgroundColor: `bg-${color}-300`,
         buttonBackgroundColor: `bg-white`,
         buttonTextColor: `text-${color}-600`,
-        textColor: "text-white"
+        textColor: "text-white",
+        themeName: `${color[0].toUpperCase()}${color.slice(1)}`
     };
 }
