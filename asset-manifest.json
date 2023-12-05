@@ -1,14 +1,16 @@
 {
   "files": {
     "main.css": "/wdr/static/css/main.31d6cfe0.css",
-    "main.js": "/wdr/static/js/main.255c86a6.js",
+    "main.js": "/wdr/static/js/main.bd8a2316.js",
     "static/js/787.a01af34f.chunk.js": "/wdr/static/js/787.a01af34f.chunk.js",
+    "static/media/cat_keyboard.gif": "/wdr/static/media/cat_keyboard.0a40e099c2d43d89ac28.gif",
+    "static/media/cursed_cat.jpg": "/wdr/static/media/cursed_cat.045c2556c9bcb5a6de06.jpg",
     "index.html": "/wdr/index.html",
-    "main.255c86a6.js.map": "/wdr/static/js/main.255c86a6.js.map",
+    "main.bd8a2316.js.map": "/wdr/static/js/main.bd8a2316.js.map",
     "787.a01af34f.chunk.js.map": "/wdr/static/js/787.a01af34f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.255c86a6.js"
+    "static/js/main.bd8a2316.js"
   ]
 }
