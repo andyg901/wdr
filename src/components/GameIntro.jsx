@@ -17,8 +17,8 @@ export const GameIntro = ({ game, theme }) => {
   }, [game]);
 
   return (
-    <p className="font-sans text-xl mt-10 px-46 text-center">
-      <span className={`${theme.headerBackgroundColor} p-2`}>{intro}</span>
+    <p className="font-sans text-xl mt-20 px-46 text-center">
+      <span className={`${theme.headerBackgroundColor} ${intro?.length === 0 ? '' :  'p-2'}`}>{intro}</span>
     </p>
   );
 };
